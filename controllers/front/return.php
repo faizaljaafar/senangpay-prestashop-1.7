@@ -60,11 +60,8 @@ class SenangpayReturnModuleFrontController extends ModuleFrontController
 
         if ($data['type'] === 'return') {
             if (!$data['paid']) {
-                if (!isset($this->context)) {
-                    $this->context = Context::getContext();
-                }
-                $this->context->cart = new Cart((int) $cart_id);
-                Tools::redirect('index.php');
+                die('<p>Your payment was failed. Please go back to the store and try again. Go back to <a href="' . $this->context->link->getPageLink('index',true) . '">' . $this->context->link->getPageLink('index',true) . '</a></p>');
+                Tools::redirect('index.php?controller=order&step=1');
             } else {
                 Tools::redirect('index.php?controller=order-confirmation&id_cart=' . $cart->id . '&id_module=' . $this->module->id . '&id_order=' . $cart_id . '&key=' . $customer->secure_key);
             }
