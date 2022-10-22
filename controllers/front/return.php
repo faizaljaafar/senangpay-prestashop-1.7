@@ -60,9 +60,49 @@ class SenangpayReturnModuleFrontController extends ModuleFrontController
 
         if ($data['type'] === 'return') {
             if (!$data['paid']) {
+                if (Tools::version_compare(_PS_VERSION_, '1.7.1.0', '>')) {
+                    $order = Order::getByCartId($cart_id);
+                } else {
+                    $order_id = Order::getOrderByCartId($cart_id);
+                    $order = new Order($order_id);
+                }
+                if ($order->getCurrentState() != Configuration::get('PS_OS_PAYMENT')) {
+
+                    $new_history = new OrderHistory();
+                    $new_history->id_order = Order::getIdByCartId($cart_id);
+                    $new_history->changeIdOrderState(Configuration::get('PS_OS_ERROR'), $order, true);
+                    $new_history->addWithemail(true);
+
+                    $payment = $order->getOrderPaymentCollection();
+                    if (isset($payment[0]))
+                    {
+                        $payment[0]->transaction_id = $data['id'];
+                        $payment[0]->save();
+                    }
+                }
                 die('<p>Your payment was failed. Please go back to the store and try again. Go back to <a href="' . $this->context->link->getPageLink('index',true) . '">' . $this->context->link->getPageLink('index',true) . '</a></p>');
                 Tools::redirect('index.php?controller=order&step=1');
             } else {
+                if (Tools::version_compare(_PS_VERSION_, '1.7.1.0', '>')) {
+                    $order = Order::getByCartId($cart_id);
+                } else {
+                    $order_id = Order::getOrderByCartId($cart_id);
+                    $order = new Order($order_id);
+                }
+                if ($order->getCurrentState() != Configuration::get('PS_OS_PAYMENT')) {
+
+                    $new_history = new OrderHistory();
+                    $new_history->id_order = Order::getIdByCartId($cart_id);
+                    $new_history->changeIdOrderState(Configuration::get('PS_OS_PAYMENT'), $order, true);
+                    $new_history->addWithemail(true);
+
+                    $payment = $order->getOrderPaymentCollection();
+                    if (isset($payment[0]))
+                    {
+                        $payment[0]->transaction_id = $data['id'];
+                        $payment[0]->save();
+                    }
+                }
                 Tools::redirect('index.php?controller=order-confirmation&id_cart=' . $cart->id . '&id_module=' . $this->module->id . '&id_order=' . $cart_id . '&key=' . $customer->secure_key);
             }
         } else {
@@ -78,6 +118,27 @@ class SenangpayReturnModuleFrontController extends ModuleFrontController
                     $new_history = new OrderHistory();
                     $new_history->id_order = Order::getIdByCartId($cart_id);
                     $new_history->changeIdOrderState(Configuration::get('PS_OS_PAYMENT'), $order, true);
+                    $new_history->addWithemail(true);
+
+                    $payment = $order->getOrderPaymentCollection();
+                    if (isset($payment[0]))
+                    {
+                        $payment[0]->transaction_id = $data['id'];
+                        $payment[0]->save();
+                    }
+                }
+            } else {
+                if (Tools::version_compare(_PS_VERSION_, '1.7.1.0', '>')) {
+                    $order = Order::getByCartId($cart_id);
+                } else {
+                    $order_id = Order::getOrderByCartId($cart_id);
+                    $order = new Order($order_id);
+                }
+                if ($order->getCurrentState() != Configuration::get('PS_OS_PAYMENT')) {
+
+                    $new_history = new OrderHistory();
+                    $new_history->id_order = Order::getIdByCartId($cart_id);
+                    $new_history->changeIdOrderState(Configuration::get('PS_OS_ERROR'), $order, true);
                     $new_history->addWithemail(true);
 
                     $payment = $order->getOrderPaymentCollection();
