@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <module>
-    <name>billplz</name>
+    <name>senangPay</name>
     <displayName><![CDATA[senangPay]]></displayName>
     <version><![CDATA[1.0]]></version>
     <description><![CDATA[The easiest way to accept online payments.]]></description>
