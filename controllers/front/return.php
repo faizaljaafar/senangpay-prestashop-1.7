@@ -38,16 +38,8 @@ class SenangpayReturnModuleFrontController extends ModuleFrontController
             exit();
         }
 
-        // $sql = 'SELECT `cart_id` FROM `' . _DB_PREFIX_ . 'senangpay` WHERE `bill_id` = "' . $data['id'] . '"';
-        // $result = Db::getInstance()->getRow($sql);
-
-        // if (empty($result)) {
-        //     exit('No valid order');
-        // }
-
         $cart_id = $data['order_id'];
         $cart = new Cart($cart_id);
-        //$total = $cart->getOrderTotal(true, Cart::BOTH);
 
         if ($cart->id_customer == 0 || $cart->id_address_delivery == 0 || $cart->id_address_invoice == 0 || !$this->module->active) {
             Tools::redirect('index.php');
@@ -76,12 +68,11 @@ class SenangpayReturnModuleFrontController extends ModuleFrontController
                     $payment = $order->getOrderPaymentCollection();
                     if (isset($payment[0]))
                     {
-                        $payment[0]->transaction_id = $data['id'];
+                        $payment[0]->transaction_id = $data['transaction_id'];
                         $payment[0]->save();
                     }
                 }
                 die('<p>Your payment was failed. Please go back to the store and try again. Go back to <a href="' . $this->context->link->getPageLink('index',true) . '">' . $this->context->link->getPageLink('index',true) . '</a></p>');
-                Tools::redirect('index.php?controller=order&step=1');
             } else {
                 if (Tools::version_compare(_PS_VERSION_, '1.7.1.0', '>')) {
                     $order = Order::getByCartId($cart_id);
@@ -99,7 +90,7 @@ class SenangpayReturnModuleFrontController extends ModuleFrontController
                     $payment = $order->getOrderPaymentCollection();
                     if (isset($payment[0]))
                     {
-                        $payment[0]->transaction_id = $data['id'];
+                        $payment[0]->transaction_id = $data['transaction_id'];
                         $payment[0]->save();
                     }
                 }
@@ -123,7 +114,7 @@ class SenangpayReturnModuleFrontController extends ModuleFrontController
                     $payment = $order->getOrderPaymentCollection();
                     if (isset($payment[0]))
                     {
-                        $payment[0]->transaction_id = $data['id'];
+                        $payment[0]->transaction_id = $data['transaction_id'];
                         $payment[0]->save();
                     }
                 }
@@ -144,7 +135,7 @@ class SenangpayReturnModuleFrontController extends ModuleFrontController
                     $payment = $order->getOrderPaymentCollection();
                     if (isset($payment[0]))
                     {
-                        $payment[0]->transaction_id = $data['id'];
+                        $payment[0]->transaction_id = $data['transaction_id'];
                         $payment[0]->save();
                     }
                 }

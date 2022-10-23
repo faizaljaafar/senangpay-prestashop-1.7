@@ -84,16 +84,6 @@ class Senangpay extends \PaymentModule
 
     public function install()
     {
-        // Db::getInstance()->execute(
-        //     'CREATE TABLE IF NOT EXISTS `' . _DB_PREFIX_ . 'senangpay` (
-        //         `id` int(11) NOT NULL AUTO_INCREMENT,
-        //         `cart_id` int(11) NOT NULL,
-        //         `transaction_reference` varchar(255) NOT NULL,
-        //         PRIMARY KEY (`id`),
-        //         INDEX `transaction_reference` (`transaction_reference`)
-        //     ) ENGINE='._MYSQL_ENGINE_.' DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;'
-        // );
-
         if (!parent::install() || !$this->registerHook('paymentReturn') || !$this->registerHook('paymentOptions') || !$this->installOrderState()) {
             return false;
         }
